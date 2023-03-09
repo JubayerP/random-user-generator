@@ -56,7 +56,7 @@ module.exports.updateUser = (req, res) => {
         return res.status(404).send("user not found");
     }
     const updateToUser = users.find(user => parseInt(user.id) === parseInt(id));
-    
+
     // update the user's information
     updateToUser.name = updatedUser.name;
     updateToUser.gender = updatedUser.gender;
@@ -69,4 +69,44 @@ module.exports.updateUser = (req, res) => {
     })
 
     res.send("data updated!")
+}
+
+
+// update multiple users
+module.exports.updateMultipleUsers = (req, res) => {
+    const users = readUsersFile();
+    const userIdsToUpdate = req.body.userIds;
+    const userDatas = req.body.userDatas;
+    const usersToUpdate = []
+
+    // const userToUpdate = users.filter(user => userIdsToUpdate.includes(user.id));
+
+    //     if (userToUpdate) {
+    //         userToUpdate.name = req.body.name;
+    //         userToUpdate.gender = req.body.gender;
+    //         userToUpdate.address = req.body.address;
+    //         userToUpdate.contact = req.body.contact;
+    //         userToUpdate.photoURL = req.body.photoURL;
+
+    //         usersToUpdate.push(userToUpdate);
+    //     }
+    // })
+
+    userIdsToUpdate.forEach(userId => {
+        const userToUpdate = users.filter(user => userIdsToUpdate.includes(user.id))
+        if (userToUpdate) {
+            const updatedUserData = userDatas.find(userData => userData.id === userId)
+            // userToUpdate.name = updatedUserData.name;
+            // userToUpdate.gender = updatedUserData.gender;
+            // userToUpdate.address = updatedUserData.address;
+            // userToUpdate.contact = updatedUserData.contact;
+            // userToUpdate.photoURL = updatedUserData.photoURL;
+        }
+    })
+
+    // fs.writeFileSync('users.json', JSON.stringify(users), err => {
+    //     if (err) throw err;
+    // })
+
+    // res.send(`${usersToUpdate.length} users updated successfully`)
 }
