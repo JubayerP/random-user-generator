@@ -38,3 +38,35 @@ module.exports.saveAUser = async (req, res) => {
     })
     res.status(200).send(`Hey ${user.name} you saved successfully!`)
 }
+
+
+// update a specefic user using id
+
+function readUsersFile() {
+    const usersFile = fs.readFileSync("users.json");
+    return JSON.parse(usersFile);
+}
+
+module.exports.updateUser = (req, res) => {
+    const users = readUsersFile();
+    const { id } = req.params;
+    const updatedUser = req.body;
+    // find the index of the user;
+    if (id <= 0 || id > users.length) {
+        return res.status(404).send("user not found");
+    }
+    const updateToUser = users.find(user => parseInt(user.id) === parseInt(id));
+    
+    // update the user's information
+    updateToUser.name = updatedUser.name;
+    updateToUser.gender = updatedUser.gender;
+    updateToUser.address = updatedUser.address;
+    updateToUser.contact = updatedUser.contact;
+    updateToUser.photoURL = updatedUser.photoURL;
+
+    fs.writeFile("users.json", JSON.stringify(users), (err) => {
+        if (err) throw err;
+    })
+
+    res.send("data updated!")
+}
