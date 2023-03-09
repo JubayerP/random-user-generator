@@ -110,3 +110,21 @@ module.exports.updateMultipleUsers = (req, res) => {
 
     // res.send(`${usersToUpdate.length} users updated successfully`)
 }
+
+
+
+module.exports.deleteUser = (req, res) => {
+    // const users = readUsersFile();
+    let usersFile = fs.readFileSync("users.json");
+    let data = JSON.parse(usersFile);
+    const { id } = req.params;
+    if (id <= 0 || id > data.length) {
+        return res.status(404).send("user not found");
+    }
+    data = data.filter(user => parseInt(user.id) !== parseInt(id));
+    usersFile = JSON.stringify(data);
+    fs.writeFile("users.json", usersFile, err => {
+        if (err) throw err;
+        res.send(`${id} deleted successfully`)
+    });
+}

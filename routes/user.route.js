@@ -13,5 +13,6 @@ router.patch("/update/:id", userController.updateUser);
 
 router.patch("/bulk-update", userController.updateMultipleUsers);
 
+router.delete("/delete/:id", userController.deleteUser)
 
 module.exports = router;
